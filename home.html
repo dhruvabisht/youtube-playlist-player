@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>YouTube Playlist Player</title>
+  <style>
+    body {
+      background-color: #e8f2ff;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #3174ad;
+      font-size: 30px;
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+    }
+    input[type="submit"] {
+      background-color: #3174ad;
+      color: #fff;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .video-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .video-item {
+      margin: 10px;
+    }
+    iframe {
+      width: 320px;
+      height: 180px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Let's Start Studying!</h1>
+    <form id="playlistForm">
+      <input type="text" id="playlistInput" placeholder="Enter YouTube Playlist Link">
+      <br>
+      <input type="submit" value="Play Playlist">
+    </form>
+    <div class="video-container" id="videoContainer"></div>
+  </div>
+
+  <script>
+    const playlistForm = document.getElementById('playlistForm');
+    const playlistInput = document.getElementById('playlistInput');
+    const videoContainer = document.getElementById('videoContainer');
+
+    playlistForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      
+      const playlistUrl = playlistInput.value;
+
+      try {
+        const response = await fetch(`/api/playlist?playlistUrl=${encodeURIComponent(playlistUrl)}`);
+        const data = await response.json();
+
+        const videoIds = data.videoIds;
+
+        // Clear existing videos
+        videoContainer.innerHTML = '';
+
+        // Embed the YouTube player for each video
+        videoIds.forEach(videoId => {
+          const videoItem = document.createElement('div');
+          videoItem.classList.add('video-item');
+          const iframe = document.createElement('iframe');
+          iframe.src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1`;
+          iframe.frameborder = 0;
+          iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+          iframe.allowFullscreen = true;
+          videoItem.appendChild(iframe);
+          videoContainer.appendChild(videoItem);
+
+          // Enable YouTube Player API
+          const player = new YT.Player(iframe, {
+            events: {
+              onReady: event => {
+                // Add video controls
+                event.target.setPlaybackQuality('hd720'); // Set initial video quality
+                event.target.setPlaybackRate(1); // Set initial playback speed
+
+                // Full-screen button click listener
+                const fullscreenButton = document.createElement('button');
+                fullscreenButton.textContent = 'Fullscreen';
+                fullscreenButton.addEventListener('click', () => {
+                  if (event.target.isFullscreen()) {
+                    event.target.exitFullscreen();
+                  } else {
+                    event.target.playVideo();
+                    event.target.requestFullscreen();
+                  }
+                });
+                videoItem.appendChild(fullscreenButton);
+
+                // Quality select dropdown
+                const qualitySelect = document.createElement('select');
+                ['hd720', 'medium', 'small'].forEach(quality => {
+                  const option = document.createElement('option');
+                  option.value = quality;
+                  option.text = quality;
+                  qualitySelect.appendChild(option);
+                });
+                qualitySelect.addEventListener('change', () => {
+                  event.target.setPlaybackQuality(qualitySelect.value);
+                });
+                videoItem.appendChild(qualitySelect);
+
+                // Speed select dropdown
+                const speedSelect = document.createElement('select');
+                [0.25, 0.5, 1, 1.5, 2].forEach(speed => {
+                  const option = document.createElement('option');
+                  option.value = speed;
+                  option.text = speed;
+                  speedSelect.appendChild(option);
+                });
+                speedSelect.addEventListener('change', () => {
+                  event.target.setPlaybackRate(speedSelect.value);
+                });
+                videoItem.appendChild(speedSelect);
+              }
+            }
+          });
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  </script>
+  <script src="https://www.youtube.com/player_api"></script>
+</body>
+</html>
