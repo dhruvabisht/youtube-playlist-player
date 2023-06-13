@@ -46,6 +46,10 @@ Enjoy studying with your YouTube playlist on the YouTube Playlist Player website
 3. The website will fetch the playlist data using the YouTube Data API and display the videos.
 4. Use the video controls to play, pause, adjust volume, go to the next or previous video, and change video quality and playback speed.
 
+## The live project
+
+https://amazing-silken-barber.glitch.me/
+
 ## Contributing
 
 Contributions are welcome! If you have any suggestions, bug reports, or feature requests, please open an issue or submit a pull request.
