@@ -19,6 +19,8 @@ This project allows you to create a website that plays YouTube videos from a spe
 
 4. **Update the Backend Code**: Replace the placeholder `'YOUR_API_KEY'` in the `server.js` file with the API key obtained in Step 1.
 
+> **Keep your API key private.** Do not commit a real API key to a public repository. Anyone who can see your key can use it, and the usage counts against your Google project. Before you push `server.js` to GitHub, put the placeholder back, or load the key from an environment variable instead.
+
 5. **Create the Frontend HTML File**: Create a new HTML file named `home.html` and copy the frontend code provided in this project.
 
 6. **Customize the Frontend**: Modify the HTML, CSS, and JavaScript code in `home.html` to suit your design preferences. Feel free to update the styling, layout, and UI elements as desired.
@@ -27,7 +29,7 @@ This project allows you to create a website that plays YouTube videos from a spe
 
 8. **Deploy the Website**: You can deploy the website using GitHub Pages by following these steps:
 - Create a new repository on GitHub.
-- Push the `home.html` and `server.js` files to the repository.
+- Push the `home.html` and `server.js` files to the repository. Check first that `server.js` does not contain your real API key (see the note in Step 4).
 - Enable GitHub Pages in the repository settings, using the `master` branch as the source.
 - Access your deployed website at `https://<username>.github.io/<repository_name>`.
 
@@ -48,7 +50,8 @@ Enjoy studying with your YouTube playlist on the YouTube Playlist Player website
 
 ## The live project
 
-https://amazing-silken-barber.glitch.me/
+The live version was hosted on Glitch. Glitch shut down its project hosting in July 2025, so that link no longer works. To use the tool now, follow the steps above and run it yourself.
+
 
 ## Contributing
 
